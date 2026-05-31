@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mapa de Hipóteses · Isabela Beloti · People & Paths</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green:  #67C089;
+    --blue:   #4A8AC9;
+    --purple: #6D4C9E;
+    --pink:   #EC1C5C;
+    --text:        #1a1a1a;
+    --text-mid:    #444444;
+    --text-muted:  #767676;
+    --border:      #d8d8d8;
+    --border-light:#eeeeee;
+    --surface:     #f7f7f7;
+    --white:       #ffffff;
+  }
+
+  html, body {
+    background: var(--white);
+    color: var(--text);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .page { max-width: 900px; margin: 0 auto; padding: 44px 44px 72px; }
+
+  /* ── GRADIENT BAR ── */
+  .gradient-bar {
+    height: 3px;
+    background: linear-gradient(90deg, var(--green), var(--blue), var(--purple), var(--pink));
+    border-radius: 2px;
+    margin-bottom: 32px;
+  }
+
+  /* ── HEADER ── */
+  .header { margin-bottom: 30px; }
+  .brand {
+    font-size: 10px; font-weight: 600; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--text-muted);
+    display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+  }
+  .brand-dots { display: flex; gap: 3px; }
+  .brand-dot  { width: 6px; height: 6px; border-radius: 50%; }
+  .title    { font-size: 22px; font-weight: 600; letter-spacing: -.3px; color: var(--text); }
+  .subtitle { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+  /* ── NAV TABS ── */
+  .nav {
+    display: flex; gap: 6px;
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 16px; margin-bottom: 28px;
+  }
+  .nav button {
+    font-size: 12px; font-family: inherit; font-weight: 500;
+    padding: 6px 18px; border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--white); color: var(--text-muted); cursor: pointer;
+    transition: all .15s;
+  }
+  .nav button:hover { border-color: var(--text-mid); color: var(--text); }
+  .nav button.active {
+    background: var(--text); color: var(--white);
+    border-color: var(--text);
+  }
+
+  .tab { display: none; }
+  .tab.active { display: block; }
+
+  /* ── HYPOTHESIS CARD ── */
+  .hyp-card {
+    border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .hyp-head {
+    padding: 18px 22px;
+    display: flex; align-items: center; gap: 14px;
+    border-bottom: 1px solid var(--border-light);
+    background: var(--surface);
+  }
+  .hyp-letter {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 700; flex-shrink: 0;
+    border: 2px solid;
+  }
+  .hyp-info { flex: 1; }
+  .hyp-name    { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .hyp-tagline { font-size: 11px; color: var(--text-muted); }
+
+  .badge {
+    font-size: 10px; font-weight: 500; padding: 4px 12px;
+    border-radius: 20px; border: 1px solid; flex-shrink: 0; white-space: nowrap;
+  }
+  .badge-green  { color: #2d8a57; border-color: #a8dbc0; background: #f0faf4; }
+  .badge-blue   { color: #1e5c96; border-color: #a0c4e8; background: #f0f6fd; }
+  .badge-amber  { color: var(--text-muted); border-color: var(--border); background: var(--surface); }
+  .badge-gray   { color: var(--text-muted); border-color: var(--border); background: var(--white); }
+
+  .hyp-body { padding: 20px 22px; background: var(--white); }
+
+  /* ── ANCHOR SCORES ── */
+  .scores-label {
+    font-size: 9px; font-weight: 600; letter-spacing: .11em;
+    text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px;
+  }
+  .a-row   { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .a-label { font-size: 11px; color: var(--text-mid); width: 175px; flex-shrink: 0; }
+  .a-track { flex: 1; height: 5px; background: var(--border-light); border-radius: 3px; overflow: hidden; }
+  .a-fill  { height: 100%; border-radius: 3px; }
+  .a-val   { font-size: 10px; color: var(--text-muted); width: 26px; text-align: right; }
+
+  /* ── DIVIDER ── */
+  .divider { height: 1px; background: var(--border-light); margin: 16px 0; }
+
+  /* ── GRID BLOCKS ── */
+  .grid-blocks { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; }
+  @media(max-width: 580px) { .grid-blocks { grid-template-columns: 1fr; } }
+
+  .block {
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 8px; padding: 13px 15px;
+  }
+  .block-full { grid-column: 1 / -1; }
+  .block-label {
+    font-size: 9px; font-weight: 600; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px;
+  }
+  .block-item {
+    font-size: 11px; color: var(--text-mid);
+    margin-bottom: 5px; padding-left: 13px;
+    position: relative; line-height: 1.5;
+  }
+  .block-item::before {
+    content: '–'; position: absolute; left: 0;
+    color: var(--border); font-size: 11px;
+  }
+  .block-item strong { color: var(--text); font-weight: 600; }
+
+  /* ── COMPARATIVE TABLE ── */
+  .comp-intro { font-size: 12px; color: var(--text-mid); margin-bottom: 20px; line-height: 1.6; }
+
+  .comp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .comp-table thead tr {
+    border-bottom: 2px solid var(--border);
+  }
+  .comp-table th {
+    font-size: 10px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase;
+    color: var(--text-muted); padding: 10px 14px; text-align: left;
+  }
+  .comp-table th.center { text-align: center; }
+  .comp-table td {
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-mid); vertical-align: middle;
+  }
+  .comp-table td.center { text-align: center; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tbody tr:hover td { background: #fafafa; }
+  .dim-label { font-size: 12px; color: var(--text); font-weight: 500; }
+
+  /* colored letter badges in table header */
+  .th-badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px; border-radius: 50%;
+    font-size: 11px; font-weight: 700; border: 2px solid;
+    margin-bottom: 3px;
+  }
+  .th-col { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+
+  /* dots */
+  .dots { display: inline-flex; gap: 3px; align-items: center; justify-content: center; }
+  .dot  { width: 9px; height: 9px; border-radius: 50%; }
+  .d-g  { background: var(--green); }
+  .d-b  { background: var(--blue); }
+  .d-p  { background: var(--purple); }
+  .d-y  { background: var(--blue); opacity: 0.4; }
+  .d-r  { background: var(--pink); }
+  .d-0  { background: var(--border-light); }
+
+  /* ── LEGEND ── */
+  .legend {
+    display: flex; gap: 20px; flex-wrap: wrap;
+    font-size: 11px; color: var(--text-muted);
+    margin-top: 14px; padding-top: 14px;
+    border-top: 1px solid var(--border-light);
+  }
+  .legend span { display: flex; align-items: center; gap: 6px; }
+
+  /* ── FOOTER ── */
+  .footer {
+    margin-top: 44px; padding-top: 16px;
+    border-top: 1px solid var(--border-light);
+    display: flex; justify-content: space-between;
+    font-size: 10px; color: var(--text-muted);
+    flex-wrap: wrap; gap: 6px;
+  }
+
+  @media print {
+    body { background: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { padding: 20px 28px; }
+    .nav  { display: none; }
+    .tab  { display: block !important; }
+    #tab-comparativo { margin-top: 48px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="gradient-bar"></div>
+
+  <div class="header">
+    <div class="brand">
+      <div class="brand-dots">
+        <span class="brand-dot" style="background:var(--green)"></span>
+        <span class="brand-dot" style="background:var(--blue)"></span>
+        <span class="brand-dot" style="background:var(--purple)"></span>
+        <span class="brand-dot" style="background:var(--pink)"></span>
+      </div>
+      People &amp; Paths · Definindo Caminhos · Orientação de Carreira
+    </div>
+    <div class="title">Mapa de Hipóteses — Isabela Beloti</div>
+    <div class="subtitle">Quatro rotas de carreira avaliadas por aderência às âncoras, viabilidade e próximos passos</div>
+  </div>
+
+  <div class="nav">
+    <button class="active" onclick="showTab('rotas',this)">Todas as rotas</button>
+    <button onclick="showTab('comparativo',this)">Comparativo</button>
+  </div>
+
+  <!-- ══════════ TODAS AS ROTAS ══════════ -->
+  <div id="tab-rotas" class="tab active">
+
+    <!-- A -->
+    <div class="hyp-card">
+      <div class="hyp-head">
+        <div class="hyp-letter" style="color:var(--green);border-color:var(--green)">A</div>
+        <div class="hyp-info">
+          <div class="hyp-name">Auditoria técnica freelance / independente</div>
+          <div class="hyp-tagline">Credenciamento como auditora de bem-estar, biosseguridade ou qualidade — nacional ou internacional</div>
+        </div>
+        <span class="badge badge-green">alta aderência</span>
+      </div>
+      <div class="hyp-body">
+        <div class="scores-label">Aderência às âncoras</div>
+        <div class="a-row"><span class="a-label">Estilo de vida</span><div class="a-track"><div class="a-fill" style="width:95%;background:var(--green)"></div></div><span class="a-val">95</span></div>
+        <div class="a-row"><span class="a-label">Serviço / causa</span><div class="a-track"><div class="a-fill" style="width:90%;background:var(--green)"></div></div><span class="a-val">90</span></div>
+        <div class="a-row"><span class="a-label">Autonomia</span><div class="a-track"><div class="a-fill" style="width:92%;background:var(--blue)"></div></div><span class="a-val">92</span></div>
+        <div class="a-row"><span class="a-label">Competência técnica</span><div class="a-track"><div class="a-fill" style="width:88%;background:var(--purple)"></div></div><span class="a-val">88</span></div>
+        <div class="divider"></div>
+        <div class="grid-blocks">
+          <div class="block">
+            <div class="block-label">O que ela já tem</div>
+            <div class="block-item">14 anos de experiência técnica no setor</div>
+            <div class="block-item">Inglês avançado — raríssimo no perfil do setor</div>
+            <div class="block-item">Rede com produtores e integradores da região</div>
+            <div class="block-item">Publicação científica internacional (credibilidade)</div>
+            <div class="block-item">Experiência com MAPA, fiscais e biosseguridade</div>
+          </div>
+          <div class="block">
+            <div class="block-label">O que falta construir</div>
+            <div class="block-item">Credenciamento formal (ABVZ, MAPA, Globalgap, SQF)</div>
+            <div class="block-item">Carteira inicial de clientes e PJ constituída</div>
+            <div class="block-item">Reserva financeira para transição (3–6 meses)</div>
+            <div class="block-item">Portfólio e posicionamento de autoridade técnica</div>
+          </div>
+          <div class="block">
+            <div class="block-label">Próximos passos concretos</div>
+            <div class="block-item">Mapear certificadoras que atuam no setor avícola no Brasil</div>
+            <div class="block-item">Consultar ABVZ sobre requisitos de credenciamento</div>
+            <div class="block-item">Verificar programas internacionais: Globalgap, BRCGS, SQF</div>
+            <div class="block-item">Conversar com 2–3 auditores independentes do setor</div>
+          </div>
+          <div class="block">
+            <div class="block-label">Riscos e mitigações</div>
+            <div class="block-item"><strong>Renda variável no início</strong> → reserva financeira prévia obrigatória</div>
+            <div class="block-item"><strong>Mercado concentrado</strong> → diversificar certificações e tipos de cliente</div>
+            <div class="block-item"><strong>Trabalho solo</strong> → já adaptada; criar rede de pares auditores</div>
+            <div class="block-item"><strong>Credenciamento leva tempo</strong> → iniciar paralelo ao emprego atual</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- B -->
+    <div class="hyp-card">
+      <div class="hyp-head">
+        <div class="hyp-letter" style="color:var(--purple);border-color:var(--purple)">B</div>
+        <div class="hyp-info">
+          <div class="hyp-name">Consultoria técnica PJ independente</div>
+          <div class="hyp-tagline">Saída da CLT para atender granjas, cooperativas e integradores como consultora pessoa jurídica</div>
+        </div>
+        <span class="badge badge-blue">boa aderência</span>
+      </div>
+      <div class="hyp-body">
+        <div class="scores-label">Aderência às âncoras</div>
+        <div class="a-row"><span class="a-label">Competência técnica</span><div class="a-track"><div class="a-fill" style="width:88%;background:var(--purple)"></div></div><span class="a-val">88</span></div>
+        <div class="a-row"><span class="a-label">Serviço / causa</span><div class="a-track"><div class="a-fill" style="width:85%;background:var(--green)"></div></div><span class="a-val">85</span></div>
+        <div class="a-row"><span class="a-label">Autonomia</span><div class="a-track"><div class="a-fill" style="width:80%;background:var(--blue)"></div></div><span class="a-val">80</span></div>
+        <div class="a-row"><span class="a-label">Estilo de vida</span><div class="a-track"><div class="a-fill" style="width:65%;background:#9ab8d8"></div></div><span class="a-val">65</span></div>
+        <div class="divider"></div>
+        <div class="grid-blocks">
+          <div class="block">
+            <div class="block-label">O que ela já tem</div>
+            <div class="block-item">Expertise técnica profunda e validada em campo</div>
+            <div class="block-item">Relacionamento sólido com produtores da região</div>
+            <div class="block-item">Domínio de protocolos, MAPA e rastreabilidade</div>
+            <div class="block-item">Capacidade de ensino e treinamento (citada com prazer)</div>
+          </div>
+          <div class="block">
+            <div class="block-label">O que falta construir</div>
+            <div class="block-item">Abertura de PJ e estrutura fiscal (MEI ou ME)</div>
+            <div class="block-item">Modelo de precificação e proposta comercial</div>
+            <div class="block-item">Contratos-base e metodologia de entrega</div>
+            <div class="block-item">Pipeline de 3–5 clientes âncora para segurança inicial</div>
+          </div>
+          <div class="block">
+            <div class="block-label">Próximos passos</div>
+            <div class="block-item">Mapear produtores sem suporte técnico contínuo</div>
+            <div class="block-item">Pesquisar tabela honorária CFMV para MVs</div>
+            <div class="block-item">Definir escopo: saúde, bem-estar, biosseg., treinamento</div>
+            <div class="block-item">Testar 1 cliente piloto ainda com vínculo CLT</div>
+          </div>
+          <div class="block">
+            <div class="block-label">Atenção — riscos específicos</div>
+            <div class="block-item"><strong>Risco de reativar "trabalhar a todo custo"</strong> sem CLT como limitador</div>
+            <div class="block-item"><strong>Fronteira de agenda</strong> precisa ser definida antes da transição</div>
+            <div class="block-item"><strong>Sazonalidade do setor</strong> pode criar lacunas de renda</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- C -->
+    <div class="hyp-card">
+      <div class="hyp-head">
+        <div class="hyp-letter" style="color:var(--text-muted);border-color:var(--border)">C</div>
+        <div class="hyp-info">
+          <div class="hyp-name">Permanência na SEARA com negociação de condições</div>
+          <div class="hyp-tagline">Continuar no vínculo atual, renegociando remuneração, agenda e formato híbrido</div>
+        </div>
+        <span class="badge badge-amber">menor risco</span>
+      </div>
+      <div class="hyp-body">
+        <div class="scores-label">Aderência às âncoras</div>
+        <div class="a-row"><span class="a-label">Segurança / estabilidade</span><div class="a-track"><div class="a-fill" style="width:90%;background:var(--blue)"></div></div><span class="a-val">90</span></div>
+        <div class="a-row"><span class="a-label">Estilo de vida</span><div class="a-track"><div class="a-fill" style="width:68%;background:#9ab8d8"></div></div><span class="a-val">68</span></div>
+        <div class="a-row"><span class="a-label">Serviço / causa</span><div class="a-track"><div class="a-fill" style="width:75%;background:var(--green)"></div></div><span class="a-val">75</span></div>
+        <div class="a-row"><span class="a-label">Autonomia</span><div class="a-track"><div class="a-fill" style="width:35%;background:var(--border)"></div></div><span class="a-val">35</span></div>
+        <div class="divider"></div>
+        <div class="grid-blocks">
+          <div class="block">
+            <div class="block-label">O que funciona nessa rota</div>
+            <div class="block-item">Menor risco de ruptura financeira e emocional</div>
+            <div class="block-item">Agenda já razoavelmente controlada no período atual</div>
+            <div class="block-item">Relação com produtor — conteúdo de trabalho valorizado</div>
+            <div class="block-item">Permite estruturar projeto paralelo com tranquilidade</div>
+          </div>
+          <div class="block">
+            <div class="block-label">O que preocupa</div>
+            <div class="block-item">Pode manter a sensação de represamento de crescimento</div>
+            <div class="block-item">Ganho limitado sem progressão de cargo estruturada</div>
+            <div class="block-item">Risco de "espera indefinida" sem movimento real</div>
+          </div>
+          <div class="block">
+            <div class="block-label">Como tornar essa rota mais ativa</div>
+            <div class="block-item">Negociar faixa salarial com base em pesquisa de mercado</div>
+            <div class="block-item">Propor expansão de escopo ou papel de referência técnica</div>
+            <div class="block-item">Usar estabilidade para iniciar credenciamento (rota A)</div>
+            <div class="block-item">Definir prazo limite de permanência sem progressão</div>
+          </div>
+          <div class="block">
+            <div class="block-label">Pergunta-chave</div>
+            <div class="block-item">O que precisaria mudar na SEARA para ela se sentir bem por mais 3 anos?</div>
+            <div class="block-item">Essa mudança é negociável ou estruturalmente improvável?</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- D -->
+    <div class="hyp-card">
+      <div class="hyp-head">
+        <div class="hyp-letter" style="color:var(--pink);border-color:var(--pink)">D</div>
+        <div class="hyp-info">
+          <div class="hyp-name">Empreendimento próprio — projeto de vida com Bruno</div>
+          <div class="hyp-tagline">Construção de negócio próprio no médio/longo prazo: pousada, agroturismo, negócio rural ou similar</div>
+        </div>
+        <span class="badge badge-gray">horizonte longo</span>
+      </div>
+      <div class="hyp-body">
+        <div class="scores-label">Aderência às âncoras</div>
+        <div class="a-row"><span class="a-label">Estilo de vida</span><div class="a-track"><div class="a-fill" style="width:95%;background:var(--green)"></div></div><span class="a-val">95</span></div>
+        <div class="a-row"><span class="a-label">Autonomia</span><div class="a-track"><div class="a-fill" style="width:90%;background:var(--blue)"></div></div><span class="a-val">90</span></div>
+        <div class="a-row"><span class="a-label">Empreendedorismo</span><div class="a-track"><div class="a-fill" style="width:70%;background:var(--purple)"></div></div><span class="a-val">70</span></div>
+        <div class="a-row"><span class="a-label">Segurança / estabilidade</span><div class="a-track"><div class="a-fill" style="width:30%;background:var(--border)"></div></div><span class="a-val">30</span></div>
+        <div class="divider"></div>
+        <div class="grid-blocks">
+          <div class="block">
+            <div class="block-label">Pontos favoráveis</div>
+            <div class="block-item">Desejo explícito, compartilhado e consistente com o Bruno</div>
+            <div class="block-item">Conexão genuína com ambiente rural já estabelecida</div>
+            <div class="block-item">Alinha estilo de vida, autonomia e projeto pessoal integral</div>
+          </div>
+          <div class="block">
+            <div class="block-label">Questões em aberto</div>
+            <div class="block-item">Qual o modelo de negócio exato? Pousada? Agroturismo?</div>
+            <div class="block-item">Qual o capital necessário e o prazo realista?</div>
+            <div class="block-item">Qual o papel de cada um no negócio?</div>
+          </div>
+          <div class="block block-full">
+            <div class="block-label">Relação com as outras hipóteses</div>
+            <div class="block-item">A (auditoria) e B (consultoria PJ) geram mais rapidamente a autonomia financeira e de agenda necessária para viabilizar D</div>
+            <div class="block-item">C (SEARA) pode ser o ponto de partida seguro enquanto D é planejado com mais concretude</div>
+            <div class="block-item">D não é alternativa às outras rotas — é o destino que as outras rotas servem para alcançar</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /tab-rotas -->
+
+  <!-- ══════════ COMPARATIVO ══════════ -->
+  <div id="tab-comparativo" class="tab">
+    <p class="comp-intro">Avaliação cruzada das quatro hipóteses em seis dimensões relevantes para as âncoras e o momento de carreira de Isabela.</p>
+
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th style="width:210px">Dimensão</th>
+          <th class="center">
+            <div class="th-col">
+              <span class="th-badge" style="color:var(--green);border-color:var(--green)">A</span>
+              <span style="font-size:9px;color:var(--text-muted)">Auditoria</span>
+            </div>
+          </th>
+          <th class="center">
+            <div class="th-col">
+              <span class="th-badge" style="color:var(--purple);border-color:var(--purple)">B</span>
+              <span style="font-size:9px;color:var(--text-muted)">Consult. PJ</span>
+            </div>
+          </th>
+          <th class="center">
+            <div class="th-col">
+              <span class="th-badge" style="color:var(--text-muted);border-color:var(--border)">C</span>
+              <span style="font-size:9px;color:var(--text-muted)">SEARA</span>
+            </div>
+          </th>
+          <th class="center">
+            <div class="th-col">
+              <span class="th-badge" style="color:var(--pink);border-color:var(--pink)">D</span>
+              <span style="font-size:9px;color:var(--text-muted)">Empreend.</span>
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="dim-label">Alinha estilo de vida</span></td>
+          <td class="center"><div class="dots"><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span></div></td>
+          <td class="center"><div class="dots"><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-0"></span><span class="dot d-0"></span></div></td>
+          <td class="center"><div class="dots"><span class="dot d-y"></span><span class="dot d-y"></span><span class="dot d-y"></span><span class="dot d-0"></span><span class="dot d-0"></span></div></td>
+          <td class="center"><div class="dots"><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span></div></td>
+        </tr>
+        <tr>
+          <td><span class="dim-label">Potencial de renda</span></td>
+          <td class="center"><div class="dots"><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-0"></span></div></td>
+          <td class="center"><div class="dots"><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-0"></span><span class="dot d-0"></span></div></td>
+          <td class="center"><div class="dots"><span class="dot d-y"></span><span class="dot d-y"></span><span class="dot d-0"></span><span class="dot d-0"></span><span class="dot d-0"></span></div></td>
+          <td class="center"><div class="dots"><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span></div></td>
+        </tr>
+        <tr>
+          <td><span class="dim-label">Risco de transição</span></td>
+          <td class="center"><div class="dots"><span class="dot d-y"></span><span class="dot d-y"></span><span class="dot d-y"></span><span class="dot d-0"></span><span class="dot d-0"></span></div></td>
+          <td class="center"><div class="dots"><span class="dot d-y"></span><span class="dot d-y"></span><span class="dot d-y"></span><span class="dot d-y"></span><span class="dot d-0"></span></div></td>
+          <td class="center"><div class="dots"><span class="dot d-g"></span><span class="dot d-0"></span><span class="dot d-0"></span><span class="dot d-0"></span><span class="dot d-0"></span></div></td>
+          <td class="center"><div class="dots"><span class="dot d-r"></span><span class="dot d-r"></span><span class="dot d-r"></span><span class="dot d-r"></span><span class="dot d-r"></span></div></td>
+        </tr>
+        <tr>
+          <td><span class="dim-label">Usa inglês avançado</span></td>
+          <td class="center"><div class="dots"><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span></div></td>
+          <td class="center"><div class="dots"><span class="dot d-y"></span><span class="dot d-y"></span><span class="dot d-0"></span><span class="dot d-0"></span><span class="dot d-0"></span></div></td>
+          <td class="center"><div class="dots"><span class="dot d-y"></span><span class="dot d-0"></span><span class="dot d-0"></span><span class="dot d-0"></span><span class="dot d-0"></span></div></td>
+          <td class="center"><div class="dots"><span class="dot d-y"></span><span class="dot d-y"></span><span class="dot d-0"></span><span class="dot d-0"></span><span class="dot d-0"></span></div></td>
+        </tr>
+        <tr>
+          <td><span class="dim-label">Velocidade de execução</span></td>
+          <td class="center"><div class="dots"><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-0"></span></div></td>
+          <td class="center"><div class="dots"><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-0"></span><span class="dot d-0"></span></div></td>
+          <td class="center"><div class="dots"><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span></div></td>
+          <td class="center"><div class="dots"><span class="dot d-r"></span><span class="dot d-r"></span><span class="dot d-0"></span><span class="dot d-0"></span><span class="dot d-0"></span></div></td>
+        </tr>
+        <tr>
+          <td><span class="dim-label">Compatível com projeto Bruno</span></td>
+          <td class="center"><div class="dots"><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span></div></td>
+          <td class="center"><div class="dots"><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-0"></span></div></td>
+          <td class="center"><div class="dots"><span class="dot d-y"></span><span class="dot d-y"></span><span class="dot d-y"></span><span class="dot d-0"></span><span class="dot d-0"></span></div></td>
+          <td class="center"><div class="dots"><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span><span class="dot d-g"></span></div></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="legend">
+      <span><span class="dot d-g" style="display:inline-block"></span> favorável</span>
+      <span><span class="dot d-y" style="display:inline-block"></span> parcial / atenção</span>
+      <!-- d-y = blue at 40% opacity -->
+      <span><span class="dot d-r" style="display:inline-block"></span> desfavorável / risco alto</span>
+      <span><span class="dot d-0" style="display:inline-block;border:1px solid #ccc;border-radius:50%"></span> neutro</span>
+    </div>
+  </div><!-- /tab-comparativo -->
+
+  <div class="footer">
+    <span>People &amp; Paths · Definindo Caminhos · pedro@peopleandpaths.com</span>
+    <span>Uso interno · Processo de orientação de carreira · Isabela Beloti</span>
+  </div>
+
+</div>
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
