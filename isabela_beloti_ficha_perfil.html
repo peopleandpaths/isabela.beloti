@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Isabela Beloti — Ficha de Perfil · People & Paths</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green:  #67C089;
+    --blue:   #4A8AC9;
+    --purple: #6D4C9E;
+    --pink:   #EC1C5C;
+    --text:        #1a1a1a;
+    --text-mid:    #444444;
+    --text-muted:  #767676;
+    --border:      #d8d8d8;
+    --border-light:#eeeeee;
+    --surface:     #f7f7f7;
+    --surface2:    #f0f0f0;
+    --white:       #ffffff;
+  }
+
+  html, body {
+    background: var(--white);
+    color: var(--text);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .page { max-width: 840px; margin: 0 auto; padding: 40px 44px 64px; }
+
+  /* ── GRADIENT BAR ── */
+  .gradient-bar {
+    height: 3px;
+    background: linear-gradient(90deg, var(--green), var(--blue), var(--purple), var(--pink));
+    border-radius: 2px;
+    margin-bottom: 32px;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    display: flex; align-items: flex-start;
+    justify-content: space-between; gap: 24px;
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 24px; margin-bottom: 28px;
+  }
+  .brand {
+    font-size: 10px; font-weight: 600; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--text-muted);
+    display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+  }
+  .brand-dots { display: flex; gap: 3px; }
+  .brand-dot  { width: 6px; height: 6px; border-radius: 50%; }
+
+  .name { font-size: 26px; font-weight: 600; letter-spacing: -.4px; color: var(--text); line-height: 1.1; }
+  .tagline { font-size: 12px; color: var(--text-muted); margin-top: 5px; }
+
+  .badges { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 12px; }
+  .badge {
+    font-size: 10px; font-weight: 500; padding: 3px 10px;
+    border-radius: 20px; border: 1px solid; letter-spacing: .02em;
+  }
+  .b-green  { color: #2d8a57; border-color: #a8dbc0; background: #f0faf4; }
+  .b-blue   { color: #1e5c96; border-color: #a0c4e8; background: #f0f6fd; }
+  .b-purple { color: #4e3080; border-color: #bca8db; background: #f4f0fb; }
+  .b-pink   { color: #b0143f; border-color: #f5a0b8; background: #fef0f4; }
+  .b-gray   { color: var(--text-muted); border-color: var(--border); background: var(--surface); }
+
+  .header-meta { text-align: right; flex-shrink: 0; padding-top: 4px; }
+  .meta-line { font-size: 10px; color: var(--text-muted); line-height: 1.8; }
+
+  /* ── GRIDS ── */
+  .grid   { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+
+  /* ── BLOCKS ── */
+  .block {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+  }
+  .block.full { grid-column: 1 / -1; }
+
+  /* colored top-border accent */
+  .block.ac-green  { border-top: 2px solid var(--green); }
+  .block.ac-blue   { border-top: 2px solid var(--blue); }
+  .block.ac-purple { border-top: 2px solid var(--purple); }
+  .block.ac-pink   { border-top: 2px solid var(--pink); }
+
+  .block-label {
+    font-size: 9px; font-weight: 600; letter-spacing: .11em;
+    text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px;
+  }
+  .block-sub { font-size: 11px; color: var(--text-mid); line-height: 1.5; }
+
+  /* ── METRICS ── */
+  .metric { display: flex; flex-direction: column; }
+  .metric-num { font-size: 32px; font-weight: 600; letter-spacing: -1.5px; line-height: 1; margin-bottom: 4px; }
+  .num-green  { color: var(--green); }
+  .num-blue   { color: var(--blue); }
+  .num-purple { color: var(--purple); }
+
+  /* ── TIMELINE ── */
+  .tl { display: flex; flex-direction: column; gap: 0; }
+  .tl-item { display: flex; gap: 14px; align-items: flex-start; position: relative; padding-bottom: 10px; }
+  .tl-item:last-child { padding-bottom: 0; }
+  .tl-left { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; width: 10px; }
+  .tl-dot  { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; border: 2px solid; }
+  .tl-line { width: 1px; flex: 1; background: var(--border-light); min-height: 12px; }
+  .tl-item:last-child .tl-line { display: none; }
+  .tl-body { flex: 1; padding-top: 1px; }
+  .tl-main { font-size: 12px; font-weight: 500; color: var(--text); }
+  .tl-meta { font-size: 10px; color: var(--text-muted); margin-top: 1px; }
+
+  /* ── ANCHOR BARS ── */
+  .a-row   { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .a-label { font-size: 11px; color: var(--text-mid); width: 155px; flex-shrink: 0; }
+  .a-track { flex: 1; height: 5px; background: var(--border-light); border-radius: 3px; overflow: hidden; }
+  .a-fill  { height: 100%; border-radius: 3px; }
+  .a-val   { font-size: 10px; color: var(--text-muted); width: 26px; text-align: right; }
+
+  /* ── INSIGHT ROWS ── */
+  .insights { display: flex; flex-direction: column; gap: 6px; }
+  .ins-row  {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 8px 10px; background: var(--surface);
+    border-radius: 7px; border-left: 3px solid var(--pink);
+  }
+  .ins-text { font-size: 11px; color: var(--text-mid); line-height: 1.5; }
+  .ins-text strong { color: var(--text); font-weight: 600; }
+
+  /* ── PILLS ── */
+  .pill-list { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+  .pill {
+    font-size: 10px; padding: 3px 9px; border-radius: 20px;
+    border: 1px solid var(--border); color: var(--text-mid);
+    background: var(--surface);
+  }
+  .pill-green { border-color: #a8dbc0; color: #2d8a57; background: #f0faf4; }
+
+  /* ── HIPÓTESES STRIP ── */
+  .hyp-strip { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 10px; }
+  .hyp-item { padding: 10px 12px; border-radius: 8px; border: 1px solid var(--border); }
+  .hyp-letter {
+    font-size: 11px; font-weight: 700; letter-spacing: .04em;
+    margin-bottom: 4px;
+  }
+  .hyp-desc { font-size: 11px; color: var(--text-mid); line-height: 1.5; }
+
+  /* ── QUOTE ── */
+  .quote-block {
+    border-left: 3px solid var(--green);
+    padding: 10px 14px; margin-top: 12px;
+    background: #f7fdf9; border-radius: 0 8px 8px 0;
+  }
+  .quote-text { font-size: 12px; color: var(--text-mid); font-style: italic; line-height: 1.6; }
+
+  /* ── FOOTER ── */
+  .footer {
+    margin-top: 32px; padding-top: 16px;
+    border-top: 1px solid var(--border-light);
+    display: flex; justify-content: space-between;
+    font-size: 10px; color: var(--text-muted);
+    flex-wrap: wrap; gap: 6px;
+  }
+
+  @media print {
+    body { background: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { padding: 20px 28px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="gradient-bar"></div>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <div class="brand">
+        <div class="brand-dots">
+          <span class="brand-dot" style="background:var(--green)"></span>
+          <span class="brand-dot" style="background:var(--blue)"></span>
+          <span class="brand-dot" style="background:var(--purple)"></span>
+          <span class="brand-dot" style="background:var(--pink)"></span>
+        </div>
+        People &amp; Paths · Definindo Caminhos
+      </div>
+      <div class="name">Isabela Beloti</div>
+      <div class="tagline">Médica Veterinária · Especialista em Avicultura Industrial · Seara / JBS</div>
+      <div class="badges">
+        <span class="badge b-green">Avicultura industrial</span>
+        <span class="badge b-blue">Inglês avançado</span>
+        <span class="badge b-purple">Publicação científica</span>
+        <span class="badge b-gray">14 anos de carreira</span>
+        <span class="badge b-gray">Campo + visão sistêmica</span>
+      </div>
+    </div>
+    <div class="header-meta">
+      <div class="meta-line">Análise: Passado e Presente</div>
+      <div class="meta-line">Orientação de Carreira · P&amp;P</div>
+    </div>
+  </div>
+
+  <!-- MÉTRICAS -->
+  <div class="grid-3">
+    <div class="block ac-green">
+      <div class="block-label">Carreira</div>
+      <div class="metric">
+        <span class="metric-num num-green">14</span>
+        <span class="block-sub">anos de trajetória<br>2011 → atual</span>
+      </div>
+    </div>
+    <div class="block ac-blue">
+      <div class="block-label">Passagens profissionais</div>
+      <div class="metric">
+        <span class="metric-num num-blue">7</span>
+        <span class="block-sub">3 promoções internas<br>Hubert + Seara / JBS</span>
+      </div>
+    </div>
+    <div class="block ac-purple">
+      <div class="block-label">Formação</div>
+      <div class="metric">
+        <span class="metric-num num-purple">2</span>
+        <span class="block-sub">Graduação + MBA<br>UNESP · USP Esalq</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRAJETÓRIA + ÂNCORAS -->
+  <div class="grid">
+    <div class="block ac-green">
+      <div class="block-label">Trajetória resumida</div>
+      <div class="tl">
+        <div class="tl-item">
+          <div class="tl-left">
+            <div class="tl-dot" style="background:var(--green);border-color:var(--green)"></div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-body">
+            <div class="tl-main">Hubert — Estágio → Analista CQ → Méd. Vet.</div>
+            <div class="tl-meta">2011 – 2013 · Genética pura / incubatório</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left">
+            <div class="tl-dot" style="background:#fff;border-color:#aaa"></div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-body">
+            <div class="tl-main">UNESP + Intercâmbio (Malta)</div>
+            <div class="tl-meta">2013 – 2014 · Pesquisa + inglês avançado</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left">
+            <div class="tl-dot" style="background:#fff;border-color:#aaa"></div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-body">
+            <div class="tl-main">Omega — Promotora Técnica</div>
+            <div class="tl-meta">Set 2014 – Mai 2015 · Medicamentos vet.</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left">
+            <div class="tl-dot" style="background:var(--blue);border-color:var(--blue)"></div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-body">
+            <div class="tl-main">Seara – Botucatu</div>
+            <div class="tl-meta">Mai 2015 – Jan 2017 · Avós / matrizes</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left">
+            <div class="tl-dot" style="background:var(--blue);border-color:var(--blue)"></div>
+            <div class="tl-line"></div>
+          </div>
+          <div class="tl-body">
+            <div class="tl-main">Seara – Amparo / Campinas</div>
+            <div class="tl-meta">2017 – atual · Médica Vet. de campo ★ melhor fase</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block ac-purple">
+      <div class="block-label">Âncoras de carreira (Schein)</div>
+      <div class="a-row">
+        <span class="a-label">Serviço / causa</span>
+        <div class="a-track"><div class="a-fill" style="width:92%;background:var(--green)"></div></div>
+        <span class="a-val">92</span>
+      </div>
+      <div class="a-row">
+        <span class="a-label">Estilo de vida</span>
+        <div class="a-track"><div class="a-fill" style="width:88%;background:var(--blue)"></div></div>
+        <span class="a-val">88</span>
+      </div>
+      <div class="a-row">
+        <span class="a-label">Competência técnica</span>
+        <div class="a-track"><div class="a-fill" style="width:80%;background:var(--purple)"></div></div>
+        <span class="a-val">80</span>
+      </div>
+      <div class="a-row">
+        <span class="a-label">Segurança / estabilidade</span>
+        <div class="a-track"><div class="a-fill" style="width:72%;background:#9ab8d8"></div></div>
+        <span class="a-val">72</span>
+      </div>
+      <div class="a-row">
+        <span class="a-label">Autonomia</span>
+        <div class="a-track"><div class="a-fill" style="width:65%;background:#b8a4d0"></div></div>
+        <span class="a-val">65</span>
+      </div>
+      <div class="a-row">
+        <span class="a-label">Empreendedorismo</span>
+        <div class="a-track"><div class="a-fill" style="width:48%;background:#cccccc"></div></div>
+        <span class="a-val">48</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TENSÕES + FORÇAS -->
+  <div class="grid">
+    <div class="block ac-pink">
+      <div class="block-label">Tensões centrais</div>
+      <div class="insights">
+        <div class="ins-row">
+          <span class="ins-text"><strong>Dedicação total × qualidade de vida</strong> — padrão "trabalhar a todo custo" já gerou 2 esgotamentos. Em processo consciente de ruptura.</span>
+        </div>
+        <div class="ins-row">
+          <span class="ins-text"><strong>Autoconfiança × competência objetiva</strong> — "me limito demais" contrasta com trajetória de conquistas verificáveis.</span>
+        </div>
+        <div class="ins-row">
+          <span class="ins-text"><strong>Estabilidade × crescimento</strong> — SEARA oferece segurança, mas salário e autonomia não correspondem ao que deseja.</span>
+        </div>
+        <div class="ins-row">
+          <span class="ins-text"><strong>Visão de futuro restrita</strong> — "não olhar o futuro, ou ver só uma fotografia." Tende a perceber o presente como destino.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="block ac-green">
+      <div class="block-label">Forças consistentes</div>
+      <div class="pill-list">
+        <span class="pill">Persistência e reinvenção</span>
+        <span class="pill">Inglês avançado</span>
+        <span class="pill">Relação com produtor rural</span>
+        <span class="pill">Visão genética → saúde → rastreabilidade</span>
+        <span class="pill">Persuasão e capacidade de ensino</span>
+        <span class="pill">Publicação científica internacional</span>
+        <span class="pill">Autogestão em campo solo</span>
+      </div>
+      <div class="block-label" style="margin-top:14px">Valores declarados</div>
+      <div class="pill-list">
+        <span class="pill pill-green">Franqueza</span>
+        <span class="pill pill-green">Justiça</span>
+        <span class="pill pill-green">Liberdade</span>
+        <span class="pill pill-green">Utilidade / impacto</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HIPÓTESES -->
+  <div class="block full ac-blue" style="margin-bottom:12px">
+    <div class="block-label">Hipóteses de caminho — próximos passos</div>
+    <div class="hyp-strip">
+      <div class="hyp-item" style="border-top:2px solid var(--green)">
+        <div class="hyp-letter" style="color:var(--green)">A · Auditoria técnica freelance</div>
+        <div class="hyp-desc">Credenciamento como auditora de bem-estar, biosseguridade ou qualidade. Inglês habilita certificações internacionais. Alta autonomia de agenda e local.</div>
+      </div>
+      <div class="hyp-item" style="border-top:2px solid var(--purple)">
+        <div class="hyp-letter" style="color:var(--purple)">B · Consultoria PJ independente</div>
+        <div class="hyp-desc">Saída da CLT para atender granjas, cooperativas ou integradores. Mantém campo e produtor; adiciona autonomia e potencial de renda maior.</div>
+      </div>
+      <div class="hyp-item" style="border-top:2px solid #aaaaaa">
+        <div class="hyp-letter" style="color:var(--text-muted)">C · Permanência + projeto paralelo</div>
+        <div class="hyp-desc">Permanência na SEARA com negociação de condições enquanto estrutura projeto pessoal com o Bruno. Menor risco imediato.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUOTE -->
+  <div class="quote-block">
+    <div class="quote-text">"Me sentir útil, necessária — quer ter trabalho híbrido, flexível. Quer estar num espaço verde, em algo que lhe dê retorno, estabilidade, que lhe permita ser criativa."</div>
+  </div>
+
+  <div class="footer">
+    <span>People &amp; Paths · Definindo Caminhos · pedro@peopleandpaths.com</span>
+    <span>Uso interno · Processo de orientação de carreira</span>
+  </div>
+
+</div>
+</body>
+</html>
